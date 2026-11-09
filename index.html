@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e3b2c">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap">
+<title>صافرة | مواعيد ونتائج المباريات</title>
+<style>
+:root{--pitch:#0e3b2c;--turf:#14513e;--line:#2d7059;--chalk:#eaf2ec;--mut:#9dbcad;--live:#ffb627;--bg:#0a2a20}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--chalk);font-family:Cairo,Tahoma,"Segoe UI",sans-serif;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);min-height:100vh}
+header{background:var(--pitch);border-bottom:2px solid var(--line);position:sticky;top:0;z-index:5;padding-top:env(safe-area-inset-top,0px)}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 6px;max-width:720px;margin:auto}
+h1{font-size:1.5rem;font-weight:800;letter-spacing:0}
+#status{font-size:.75rem;color:var(--mut)}
+.row{display:flex;gap:8px;overflow-x:auto;padding:6px 16px;max-width:720px;margin:auto;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.chip{flex:none;padding:6px 14px;border-radius:99px;border:1px solid var(--line);font-size:.9rem}
+.chip[aria-pressed=true]{background:var(--chalk);color:var(--pitch);border-color:var(--chalk);font-weight:600}
+.day{flex:none;min-width:58px;padding:6px 4px;text-align:center;border-bottom:3px solid transparent;font-size:.85rem;color:var(--mut)}
+.day b{display:block;font-size:1.05rem;color:var(--chalk)}
+.day[aria-pressed=true]{border-color:var(--live);color:var(--chalk)}
+main{max-width:720px;margin:auto;padding:12px 12px 40px}
+.league{margin-bottom:14px;background:var(--turf);border-radius:10px;overflow:hidden}
+.league h2{font-size:.95rem;font-weight:600;padding:9px 14px;background:var(--pitch);color:var(--mut)}
+.league h2 span{color:var(--chalk)}
+.m{display:grid;grid-template-columns:54px 1fr 64px 1fr 30px;align-items:center;gap:6px;padding:12px 10px;border-top:1px solid var(--line);font-size:.95rem}
+.t{display:flex;align-items:center;gap:6px;min-width:0}
+.t span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t.a{justify-content:flex-start}
+.t img{width:20px;height:20px;object-fit:contain}
+.sc{font-weight:800;font-size:1.15rem;text-align:center;direction:ltr;letter-spacing:1px}
+.st{font-size:.78rem;color:var(--mut);text-align:center}
+.st.live{color:var(--live);font-weight:600}
+.st.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--live);margin-inline-end:4px;animation:p 1.2s infinite}
+@keyframes p{50%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){.st.live::before{animation:none}}
+.star{font-size:1.15rem;color:var(--mut)}
+.star[aria-pressed=true]{color:var(--live)}
+button:focus-visible{outline:2px solid var(--live);outline-offset:2px}
+.empty{text-align:center;color:var(--mut);padding:48px 16px}
+.demo{background:var(--live);color:#2b1d00;font-size:.78rem;text-align:center;padding:5px}
+@media(max-width:380px){.m{grid-template-columns:46px 1fr 54px 1fr 26px;font-size:.85rem}}
+.m{cursor:pointer}
+.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);overflow:auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet[hidden]{display:none}
+.sh{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--pitch);border-bottom:2px solid var(--line);position:sticky;top:0}
+.x{font-size:1.2rem;padding:4px 10px}
+.sb,.sheet .row,.sheet .body{max-width:720px;margin:auto}
+.sb{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:20px 16px;text-align:center}
+.tm{display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:600}
+.tm img{width:44px;height:44px;object-fit:contain}
+.big{font-size:2.2rem;font-weight:800;direction:ltr}
+.sheet .body{padding:8px 16px 40px}
+.ev{display:grid;grid-template-columns:44px 56px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.ev small,.pl small{color:var(--mut)}
+.lu h3{padding:14px 0 6px}
+.lu h4{color:var(--mut);font-weight:600;padding:10px 0 4px;font-size:.85rem}
+.pl{padding:5px 0;border-bottom:1px solid var(--line)}
+.pl b{display:inline-block;min-width:28px;color:var(--live)}
+.stat{padding:10px 0}
+.sv{display:flex;justify-content:space-between;font-size:.95rem}
+.sv span{color:var(--mut)}
+.bar{display:flex;gap:4px;height:6px;margin-top:6px}
+.bar i,.bar u{display:block;border-radius:3px;text-decoration:none}
+.bar i{background:var(--live)}
+.bar u{background:var(--chalk)}
+</style>
+</head>
+<body>
+<div class="demo" id="demo" hidden>وضع تجريبي: البيانات المعروضة وهمية. اضبط API_BASE لعرض نتائج حقيقية.</div>
+<header>
+  <div class="bar"><h1>صافرة</h1><span id="status"></span></div>
+  <div class="row" id="sports"></div>
+  <div class="row" id="days"></div>
+  <div class="row" id="tabs"></div>
+</header>
+<main id="list" aria-live="polite"></main>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" hidden></div>
+
+<script>
+/* ===== الإعدادات =====
+   API_BASE: رابط الخادم الوسيط (Cloudflare Worker مثلاً) الذي يضيف مفتاح API-Football.
+   اتركه فارغاً لعرض بيانات تجريبية. لا تضع مفتاح API هنا أبداً. */
+const CONFIG = { API_BASE: "https://saferah-api.hardwaregypt.workers.dev", REFRESH_MS: 60000 };
+
+const SPORTS = [{id:"football",n:"كرة القدم",i:"⚽"},{id:"basketball",n:"كرة السلة",i:"🏀"},{id:"tennis",n:"التنس",i:"🎾"}];
+const TABS = [{id:"all",n:"الكل"},{id:"live",n:"مباشر"},{id:"done",n:"انتهت"},{id:"next",n:"قادمة"},{id:"fav",n:"المفضلة"}];
+/* البطولات الكبرى: رقم البطولة في API-Football ← [الاسم بالعربية، الأولوية]. عدّل هذا الجدول كما تشاء. */
+const TOP = {2:["دوري أبطال أوروبا",0],39:["الدوري الإنجليزي الممتاز",1],140:["الدوري الإسباني",2],135:["الدوري الإيطالي",3],78:["الدوري الألماني",4],61:["الدوري الفرنسي",5],3:["الدوري الأوروبي",6],848:["دوري المؤتمر الأوروبي",7],233:["الدوري المصري الممتاز",8],307:["دوري روشن السعودي",9],12:["دوري أبطال أفريقيا",10],20:["كأس الكونفدرالية الأفريقية",11],17:["دوري أبطال آسيا",12],6:["كأس الأمم الأفريقية",13],1:["كأس العالم",14],4:["كأس أمم أوروبا",15],45:["كأس الاتحاد الإنجليزي",16],143:["كأس ملك إسبانيا",17],202:["الدوري التونسي",18],186:["الدوري الجزائري",19],200:["الدوري المغربي",20]};
+
+const store = {
+  get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const S = {sport:"football", offset:0, tab:"all", fav:store.get("fav",[]), top:store.get("top",false), data:[]};
+const $ = id => document.getElementById(id);
+const fmtT = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
+const dayOf = off => { const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+off); return d; };
+const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+
+/* ===== بيانات تجريبية ===== */
+const DEMO = {
+  football:[
+    {id:39,l:"الدوري الإنجليزي الممتاز",c:"إنجلترا",t:["ليفربول","أرسنال","مانشستر سيتي","تشيلسي","توتنهام","نيوكاسل"]},
+    {id:140,l:"الدوري الإسباني",c:"إسبانيا",t:["ريال مدريد","برشلونة","أتلتيكو مدريد","إشبيلية","فالنسيا","بيلباو"]},
+    {id:307,l:"دوري روشن السعودي",c:"السعودية",t:["الهلال","النصر","الاتحاد","الأهلي","الشباب","الفتح"]},
+    {id:233,l:"الدوري المصري",c:"مصر",t:["الأهلي","الزمالك","بيراميدز","سيراميكا","المصري","الإسماعيلي"]}],
+  basketball:[{l:"دوري NBA",c:"أمريكا",t:["ليكرز","ووريورز","سيلتكس","هيت","بكس","نتس"]}],
+  tennis:[{l:"بطولة ATP",c:"عالمي",t:["ألكاراز","سينر","ديوكوفيتش","ميدفيديف","زفيريف","روبليف"]}]
+};
+const hash = s => { let h=0; for(const c of s) h=(h*31+c.charCodeAt(0))>>>0; return h; };
+function demoFixtures(sport, off){
+  const day = dayOf(off), now = new Date(), out = [];
+  DEMO[sport].forEach((lg,li)=>{
+    for(let k=0;k<3;k++){
+      const seed = hash(sport+iso(day)+li+k);
+      const home = lg.t[seed%6], away = lg.t[(seed%6+1+(seed>>3)%5)%6];
+      const kick = new Date(day); kick.setHours(14+((seed>>5)%8), ((seed>>9)%4)*15, 0, 0);
+      const mins = Math.floor((now-kick)/60000);
+      let status="NS", min=0, hg=null, ag=null;
+      const fin = [(seed>>2)%4,(seed>>6)%3], max = sport==="football"?1:1;
+      if(mins>=110){ status="FT"; hg=fin[0]*(sport==="football"?1:25+seed%20)+(sport==="football"?0:60); ag=fin[1]*(sport==="football"?1:25+seed%20)+(sport==="football"?0:55); }
+      else if(mins>=0){ status="LIVE"; min=Math.min(mins,90); const f=min/90; hg=Math.round(fin[0]*f*(sport==="football"?1:20)); ag=Math.round(fin[1]*f*(sport==="football"?1:20)); }
+      out.push({id:sport+iso(day)+li+k,lid:lg.id,league:lg.l,country:lg.c,home,away,hg,ag,status,min,kick});
+    }
+  });
+  return out.sort((a,b)=>a.kick-b.kick);
+}
+
+/* ===== API-Football عبر الخادم الوسيط ===== */
+const LIVE = ["1H","HT","2H","ET","BT","P","LIVE","INT"], DONE = ["FT","AET","PEN"];
+function normalize(r){
+  const s = r.fixture.status.short;
+  return {id:"f"+r.fixture.id, lid:r.league.id, fid:r.fixture.id, league:r.league.name, country:r.league.country,
+    home:r.teams.home.name, away:r.teams.away.name, hl:r.teams.home.logo, al:r.teams.away.logo,
+    hg:r.goals.home, ag:r.goals.away, min:r.fixture.status.elapsed||0,
+    status: LIVE.includes(s)?"LIVE":DONE.includes(s)?"FT":["NS","TBD"].includes(s)?"NS":s,
+    kick:new Date(r.fixture.date)};
+}
+async function load(){
+  const day = dayOf(S.offset);
+  $("demo").hidden = !!CONFIG.API_BASE;
+  try{
+    if(CONFIG.API_BASE && S.sport==="football"){
+      const res = await fetch(CONFIG.API_BASE+"/fixtures?date="+iso(day));
+      if(!res.ok) throw new Error(res.status);
+      S.data = (await res.json()).response.map(normalize).sort((a,b)=>a.kick-b.kick);
+    } else { S.data = demoFixtures(S.sport,S.offset); $("demo").hidden = false; }
+    $("status").textContent = "آخر تحديث " + fmtT(new Date());
+  }catch(e){
+    $("status").textContent = "تعذر التحديث، تُعرض آخر بيانات محفوظة";
+  }
+  render();
+}
+
+/* ===== العرض ===== */
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function stText(m){
+  if(m.status==="LIVE") return {c:"live",t:m.min?m.min+"'":"مباشر"};
+  if(m.status==="FT") return {c:"",t:"انتهت"};
+  if(m.status==="NS") return {c:"",t:fmtT(m.kick)};
+  return {c:"",t:"مؤجلة"};
+}
+function render(){
+  const f = S.data.filter(m => (!S.top||TOP[m.lid]) && (
+    S.tab==="all"||(S.tab==="live"&&m.status==="LIVE")||(S.tab==="done"&&m.status==="FT")||
+    (S.tab==="next"&&m.status==="NS")||(S.tab==="fav"&&S.fav.includes(m.id))));
+  if(!f.length){ $("list").innerHTML='<p class="empty">لا توجد مباريات في هذا القسم. جرّب يوماً آخر أو اختر «الكل».</p>'; return; }
+  const nm = m => (TOP[m.lid] && TOP[m.lid][0]) || m.league;
+  const g = {}; f.forEach(m => (g[nm(m)] ||= {c:m.country,p:TOP[m.lid]?TOP[m.lid][1]:99,a:[]}).a.push(m));
+  $("list").innerHTML = Object.entries(g).sort((x,y)=>x[1].p-y[1].p).map(([l,v]) =>
+    `<section class="league"><h2><span>${esc(l)}</span> · ${esc(v.c)}</h2>` +
+    v.a.map(m => { const s=stText(m), has=m.hg!==null&&m.hg!==undefined;
+      return `<div class="m" data-id="${esc(m.id)}" role="button" tabindex="0"><div class="st ${s.c}">${s.t}</div>
+      <div class="t">${m.hl?`<img src="${esc(m.hl)}" alt="" loading="lazy">`:""}<span>${esc(m.home)}</span></div>
+      <div class="sc">${has?m.hg+" - "+m.ag:"-"}</div>
+      <div class="t a">${m.al?`<img src="${esc(m.al)}" alt="" loading="lazy">`:""}<span>${esc(m.away)}</span></div>
+      <button class="star" data-id="${esc(m.id)}" aria-pressed="${S.fav.includes(m.id)}" aria-label="إضافة إلى المفضلة">★</button></div>`; }).join("") +
+    `</section>`).join("");
+}
+function chips(){
+  $("sports").innerHTML = SPORTS.map(s=>`<button class="chip" data-sport="${s.id}" aria-pressed="${S.sport===s.id}">${s.i} ${s.n}</button>`).join("");
+  $("tabs").innerHTML = '<button class="chip" data-top="1" aria-pressed="'+S.top+'">★ البطولات الكبرى</button>' + TABS.map(t=>`<button class="chip" data-tab="${t.id}" aria-pressed="${S.tab===t.id}">${t.n}</button>`).join("");
+  let h=""; for(let o=-3;o<=3;o++){ const d=dayOf(o);
+    h+=`<button class="day" data-off="${o}" aria-pressed="${S.offset===o}">${o===0?"اليوم":d.toLocaleDateString("ar",{weekday:"short"})}<b>${d.getDate()}</b></button>`; }
+  $("days").innerHTML = h;
+}
+document.addEventListener("click", e => {
+  const mr = e.target.closest(".m");
+  if(mr && !e.target.closest("button")){ openMatch(mr.dataset.id); return; }
+  const b = e.target.closest("button"); if(!b) return;
+  if(b.dataset.close){ closeOrBack(); return; }
+  if(b.dataset.dt){ curTab=b.dataset.dt; const h=DET.get(cur.id); paintSheet(h?h.d:null, h?undefined:"loading"); return; }
+  if(b.dataset.sport){ S.sport=b.dataset.sport; chips(); load(); }
+  else if(b.dataset.off){ S.offset=+b.dataset.off; chips(); load(); }
+  else if(b.dataset.top){ S.top=!S.top; store.set("top",S.top); chips(); render(); }
+  else if(b.dataset.tab){ S.tab=b.dataset.tab; chips(); render(); }
+  else if(b.dataset.id){ const i=S.fav.indexOf(b.dataset.id); i<0?S.fav.push(b.dataset.id):S.fav.splice(i,1); store.set("fav",S.fav); render(); }
+});
+chips(); load();
+/* ===== تفاصيل المباراة ===== */
+const DET = new Map();
+let curTab = "ev", cur = null;
+const STAT_AR = {"Shots on Goal":"تسديدات على المرمى","Shots off Goal":"تسديدات خارج المرمى","Total Shots":"إجمالي التسديدات","Blocked Shots":"تسديدات مصدودة","Fouls":"الأخطاء","Corner Kicks":"الركنيات","Offsides":"التسلل","Ball Possession":"الاستحواذ","Yellow Cards":"إنذارات","Red Cards":"طرد","Goalkeeper Saves":"تصديات الحارس","Total passes":"التمريرات","Passes accurate":"تمريرات صحيحة","Passes %":"دقة التمرير","expected_goals":"الأهداف المتوقعة"};
+function demoDetails(m){
+  if(m.status==="NS") return {ev:[],lu:[],st:[]};
+  const ev=[], h=m.hg||0, a=m.ag||0, mx=m.status==="LIVE"?Math.max(m.min,1):90;
+  for(let i=0;i<h+a;i++) ev.push({time:{elapsed:Math.min(mx,5+hash(m.id+i)%85)},team:{name:i<h?m.home:m.away},player:{name:"لاعب تجريبي"},assist:{name:null},type:"Goal",detail:"Normal Goal"});
+  ev.sort((x,y)=>x.time.elapsed-y.time.elapsed);
+  const mk=(t,p,sh,on,c,f)=>({team:{name:t},statistics:[{type:"Ball Possession",value:p+"%"},{type:"Total Shots",value:sh},{type:"Shots on Goal",value:on},{type:"Corner Kicks",value:c},{type:"Fouls",value:f}]});
+  return {ev, lu:[], st:[mk(m.home,54,12,5,6,11), mk(m.away,46,9,3,4,13)]};
+}
+async function getDetails(m){
+  const hit = DET.get(m.id);
+  if(hit && Date.now()-hit.t < (m.status==="FT"?3600000:60000)) return hit.d;
+  let d;
+  if(CONFIG.API_BASE && m.fid){
+    const res = await fetch(CONFIG.API_BASE+"/fixtures?id="+m.fid);
+    if(!res.ok) throw new Error(res.status);
+    const r = ((await res.json()).response||[])[0];
+    if(!r) throw new Error("empty");
+    d = {ev:r.events||[], lu:r.lineups||[], st:r.statistics||[]};
+  } else d = demoDetails(m);
+  DET.set(m.id,{t:Date.now(),d});
+  return d;
+}
+function evIcon(e){
+  const t=e.type, d=e.detail||"";
+  if(t==="Goal") return d==="Own Goal"?"⚽ ضد مرماه":d==="Penalty"?"⚽ جزاء":d==="Missed Penalty"?"❌ جزاء":"⚽";
+  if(t==="Card") return d.includes("Red")?"🟥":"🟨";
+  if(t==="subst") return "🔄";
+  if(t==="Var") return "VAR";
+  return "•";
+}
+function evHtml(list){
+  if(!list.length) return '<p class="empty">لا توجد أحداث بعد.</p>';
+  return list.map(e=>{
+    const min=(e.time.elapsed||0)+(e.time.extra?"+"+e.time.extra:"");
+    const pn=e.player&&e.player.name||"", an=e.assist&&e.assist.name||"";
+    const who = e.type==="subst" ? esc(pn)+" ⇄ "+esc(an) : esc(pn)+(e.type==="Goal"&&an?" <small>(صناعة: "+esc(an)+")</small>":"");
+    return `<div class="ev"><b>${min}'</b><span>${evIcon(e)}</span><span>${who}<small> · ${esc(e.team.name)}</small></span></div>`;
+  }).join("");
+}
+function luHtml(l){
+  if(!l.length) return '<p class="empty">التشكيلة غير متاحة بعد. تظهر عادةً قبل المباراة بوقت قصير.</p>';
+  const pl=x=>`<div class="pl"><b>${x.player.number??""}</b> ${esc(x.player.name)}</div>`;
+  return l.map(t=>`<div class="lu"><h3>${esc(t.team.name)} <small>${esc(t.formation||"")}</small></h3>${(t.startXI||[]).map(pl).join("")}<h4>البدلاء</h4>${(t.substitutes||[]).map(pl).join("")}${t.coach&&t.coach.name?`<h4>المدرب: ${esc(t.coach.name)}</h4>`:""}</div>`).join("");
+}
+function stHtml(s){
+  if(s.length<2) return '<p class="empty">الإحصائيات غير متاحة بعد.</p>';
+  const rows=s[0].statistics.map(x=>{ const y=s[1].statistics.find(z=>z.type===x.type); return [x.type,x.value,y?y.value:null]; }).filter(r=>r[1]!==null||r[2]!==null);
+  return rows.map(([k,a,b])=>{
+    const na=parseFloat(a)||0, nb=parseFloat(b)||0, sum=(na+nb)||1;
+    return `<div class="stat"><div class="sv"><b>${a??0}</b><span>${esc(STAT_AR[k]||k)}</span><b>${b??0}</b></div><div class="bar"><i style="width:${na/sum*100}%"></i><u style="width:${nb/sum*100}%"></u></div></div>`;
+  }).join("");
+}
+function paintSheet(d,state){
+  const m=cur, s=stText(m), has=m.hg!==null&&m.hg!==undefined;
+  const body = state==="loading" ? '<p class="empty">جارٍ التحميل...</p>'
+    : state==="error" ? '<p class="empty">تعذر جلب التفاصيل. حاول بعد قليل.</p>'
+    : curTab==="ev" ? evHtml(d.ev) : curTab==="lu" ? luHtml(d.lu) : stHtml(d.st);
+  const tm=(n,l)=>`<div class="tm">${l?`<img src="${esc(l)}" alt="">`:""}<span>${esc(n)}</span></div>`;
+  $("sheet").innerHTML = `<div class="sh"><button class="x" data-close="1" aria-label="إغلاق">✕</button><span>${esc(m.league)}</span></div>
+  <div class="sb">${tm(m.home,m.hl)}<div><div class="big">${has?m.hg+" - "+m.ag:"-"}</div><div class="st ${s.c}">${s.t}</div></div>${tm(m.away,m.al)}</div>
+  <div class="row">${[["ev","الأحداث"],["lu","التشكيلة"],["st","الإحصائيات"]].map(([k,n])=>`<button class="chip" data-dt="${k}" aria-pressed="${curTab===k}">${n}</button>`).join("")}</div>
+  <div class="body">${body}</div>`;
+}
+async function openMatch(id){
+  const m=S.data.find(x=>x.id===id); if(!m) return;
+  cur=m; curTab="ev";
+  $("sheet").hidden=false; document.body.style.overflow="hidden";
+  if(location.hash!=="#match") location.hash="match";
+  paintSheet(null,"loading");
+  try{ const d=await getDetails(m); if(cur===m) paintSheet(d); }
+  catch(e){ if(cur===m) paintSheet(null,"error"); }
+}
+function closeSheet(){ $("sheet").hidden=true; document.body.style.overflow=""; cur=null; }
+function closeOrBack(){ if(location.hash==="#match") history.back(); else closeSheet(); }
+window.addEventListener("hashchange",()=>{ if(location.hash!=="#match" && !$("sheet").hidden) closeSheet(); });
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && e.target.classList && e.target.classList.contains("m")) openMatch(e.target.dataset.id);
+  if(e.key==="Escape" && !$("sheet").hidden) closeOrBack();
+});
+setInterval(() => { if(cur && cur.status==="LIVE" && !$("sheet").hidden) getDetails(cur).then(d=>{ if(cur) paintSheet(d); }).catch(()=>{}); }, 60000);
+setInterval(() => { if(S.offset===0 && !document.hidden) load(); }, CONFIG.REFRESH_MS);
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
