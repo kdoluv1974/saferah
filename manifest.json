@@ -1,0 +1,17 @@
+{
+  "name": "صافرة - مواعيد ونتائج المباريات",
+  "short_name": "صافرة",
+  "description": "مواعيد ونتائج مباريات كرة القدم العالمية والرياضات الأخرى",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a2a20",
+  "theme_color": "#0e3b2c",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml"}
+  ]
+}
