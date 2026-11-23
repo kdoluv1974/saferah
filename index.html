@@ -1,0 +1,577 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<meta name="description" content="مواعيد ونتائج المباريات المباشرة لكرة القدم وبقية الرياضات">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="صافرة">
+<meta property="og:title" content="صافرة | مواعيد ونتائج المباريات">
+<meta property="og:type" content="website">
+<link rel="manifest" href="manifest.json" id="mf">
+<script>
+/* نادي المستخدم: يُختار manifest وأيقونة الآيفون الخاصة به قبل أن يقرأهما المتصفح */
+(function(){try{var c=new URLSearchParams(location.search).get("club")||JSON.parse(localStorage.getItem("club")||"null");
+if(c&&/^[a-z0-9-]{2,24}$/.test(c)){document.getElementById("mf").href="m/"+c+".json";var a=document.querySelector("link[rel=apple-touch-icon]");if(a)a.href="icons/"+c+"-192.png";}}catch(e){}})();
+</script>
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap">
+<title>صافرة | مواعيد ونتائج المباريات</title>
+<style>
+:root{--bg:#0b1220;--card:#141d2e;--card2:#1b2740;--line:#243049;--txt:#e8eef9;--mut:#8a98b3;--acc:#f5b301;--live:#ff5a5f;--gold:#ffb627}
+[data-th=light]{--bg:#eef2f7;--card:#fff;--card2:#f1f4f9;--line:#dde4ee;--txt:#101828;--mut:#667085;--acc:#d98e00;--live:#e5383b}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--txt);font-family:Cairo,Tahoma,"Segoe UI",sans-serif;min-height:100vh;padding-bottom:env(safe-area-inset-bottom,0px)}
+header{background:var(--card);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.stk{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top{display:flex;align-items:center;gap:10px;padding:12px 16px 6px;max-width:760px;margin:auto}
+.top .logo{width:66px;height:44px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(245,179,1,.35))}
+h1{font-size:1.35rem;font-weight:800;flex:1}
+#status{font-size:.68rem;color:var(--mut)}
+.ib{width:34px;height:34px;border-radius:50%;background:var(--card2);font-size:1rem}
+.sr{max-width:760px;margin:auto;padding:4px 16px}
+#q{width:100%;padding:9px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card2);color:var(--txt);font:inherit;font-size:.9rem}
+.row{display:flex;gap:8px;overflow-x:auto;padding:6px 16px;max-width:760px;margin:auto;scrollbar-width:none}
+.row::-webkit-scrollbar{display:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.chip{flex:none;padding:6px 14px;border-radius:99px;background:var(--card2);font-size:.86rem;color:var(--mut)}
+.chip[aria-pressed=true]{background:var(--acc);color:var(--on,#1a1200);font-weight:700}
+.cnt{font-style:normal;background:var(--live);color:#fff;border-radius:99px;padding:0 6px;font-size:.7rem;margin-inline-start:4px}
+.day{flex:none;min-width:54px;padding:6px 4px;text-align:center;border-radius:12px;font-size:.78rem;color:var(--mut)}
+.day b{display:block;font-size:1.05rem;color:var(--txt)}
+.day[aria-pressed=true]{background:var(--card2);box-shadow:inset 0 -3px var(--acc)}
+main{max-width:760px;margin:auto;padding:12px 12px 40px}
+.league{margin-bottom:12px;background:var(--card);border-radius:14px;overflow:hidden}
+.lh{display:flex;align-items:center;gap:8px;width:100%;padding:11px 14px;text-align:start;font-weight:700;font-size:.92rem}
+.lh img{width:20px;height:20px;object-fit:contain}
+.lh small{color:var(--mut);font-weight:400;flex:1}
+.lh em{font-style:normal;color:var(--mut);transition:transform .2s}
+.league.c .lh em{transform:rotate(90deg)}
+.league.c .ms{display:none}
+.m{display:grid;grid-template-columns:48px 1fr 66px 1fr 28px;align-items:center;gap:6px;padding:12px 10px;border-top:1px solid var(--line);font-size:.93rem;cursor:pointer}
+.m:hover{background:var(--card2)}
+.m.g{animation:gl 1.4s ease 3}
+@keyframes gl{50%{background:rgba(245,179,1,.3)}}
+.t{display:flex;align-items:center;gap:8px;min-width:0}
+.t span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.t img{width:24px;height:24px;object-fit:contain}
+.sc{font-weight:800;font-size:1.08rem;text-align:center;direction:ltr;background:var(--card2);border-radius:8px;padding:3px 0}
+.sc.lv{color:var(--live)}
+.st{font-size:.74rem;color:var(--mut);text-align:center}
+.st.live{color:var(--live);font-weight:700}
+.st.live::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--live);margin-inline-end:4px;animation:p 1.2s infinite}
+@keyframes p{50%{opacity:.25}}
+@media(prefers-reduced-motion:reduce){.st.live::before,.m.g,.sk{animation:none}}
+.star{font-size:1.15rem;color:var(--mut)}
+.star[aria-pressed=true]{color:var(--gold)}
+button:focus-visible,#q:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.np{max-width:760px;margin:auto;padding:8px 16px;display:grid;gap:8px;font-size:.88rem;border-top:1px solid var(--line)}
+.np[hidden]{display:none}
+.np label{display:flex;gap:8px;align-items:center}
+#nst{color:var(--mut)}
+.chip .n2{font-style:normal;opacity:.7;font-size:.72rem;margin-inline-start:4px}
+.seg{display:flex;gap:8px;max-width:760px;margin:auto;padding:4px 16px 2px}
+.sg{flex:1;padding:8px;border-radius:10px;background:var(--card2);color:var(--mut);font-weight:700}
+.sg[aria-pressed=true]{background:var(--acc);color:var(--on,#1a1200)}
+#arts{display:none;max-width:760px;margin:auto;padding:12px}
+body[data-view=articles] #arts{display:block}
+body[data-view=articles] #list,body[data-view=articles] .stk,body[data-view=articles] #sports,body[data-view=articles] #kinds,body[data-view=articles] #cns{display:none}
+.ac{display:flex;gap:12px;background:var(--card);border-radius:14px;padding:12px;margin-bottom:12px;cursor:pointer}
+.ac:hover{background:var(--card2)}
+.ac img{width:96px;height:72px;object-fit:cover;border-radius:10px;flex:none}
+.ac small{color:var(--mut)} .ac h3{font-size:1rem;margin:4px 0} .ac p{color:var(--mut);font-size:.86rem}
+.ac small b{color:var(--gold)}
+.art{max-width:760px;margin:auto;padding:16px;line-height:1.9}
+.art h1{font-size:1.4rem;margin:6px 0} .art h2{font-size:1.15rem;margin:22px 0 6px;color:var(--acc)} .art h3{margin:14px 0 4px}
+.art p{margin:8px 0} .art ul,.art ol{padding-inline-start:22px;margin:8px 0} .art img{max-width:100%;border-radius:12px}
+.art a{color:var(--acc)} .art blockquote{border-inline-start:3px solid var(--acc);padding-inline-start:12px;color:var(--mut);margin:10px 0}
+.art small{color:var(--mut)} .art .row{padding:12px 0}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;background:var(--card);border-radius:14px;padding:12px;margin:12px 0;font-size:.9rem;line-height:1.6}
+.facts dt{color:var(--mut)} .facts dd{margin:0}
+.scroll{overflow-x:auto} .art table{border-collapse:collapse;width:100%;font-size:.9rem}
+.art th,.art td{padding:6px 8px;border-bottom:1px solid var(--line);text-align:start} .art th{color:var(--mut);font-weight:600}
+.cg{display:flex;flex-wrap:wrap;gap:8px}
+.gh{color:var(--mut);font-weight:600;font-size:.82rem;margin:8px 0 2px}
+.dot{width:14px;height:14px;border-radius:50%;display:inline-block;vertical-align:-2px;margin-inline-end:6px;border:1px solid var(--line)}
+.empty{text-align:center;color:var(--mut);padding:48px 16px}
+.demo{background:var(--gold);color:#2b1d00;font-size:.78rem;text-align:center;padding:5px}
+.sk{height:64px;border-radius:14px;margin-bottom:12px;background:linear-gradient(90deg,var(--card) 25%,var(--card2) 50%,var(--card) 75%);background-size:200% 100%;animation:sh 1.2s linear infinite}
+@keyframes sh{to{background-position:-200% 0}}
+@media(max-width:380px){.m{grid-template-columns:44px 1fr 58px 1fr 24px;font-size:.84rem}}
+.sheet{position:fixed;inset:0;z-index:20;background:var(--bg);overflow:auto;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet[hidden]{display:none}
+.sh{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line);position:sticky;top:0}
+.x{font-size:1.2rem;padding:4px 10px}
+.sb,.sheet .row,.sheet .body{max-width:760px;margin:auto}
+.sb{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:22px 16px;text-align:center}
+.tm{display:flex;flex-direction:column;align-items:center;gap:6px;font-weight:700}
+.tm img{width:52px;height:52px;object-fit:contain}
+.big{font-size:2.4rem;font-weight:800;direction:ltr}
+.sheet .body{padding:8px 16px 40px}
+.ev{display:grid;grid-template-columns:44px 56px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.ev small,.pl small{color:var(--mut)}
+.lu h3{padding:14px 0 6px}
+.lu h4{color:var(--mut);font-weight:600;padding:10px 0 4px;font-size:.85rem}
+.pl{padding:5px 0;border-bottom:1px solid var(--line)}
+.pl b{display:inline-block;min-width:28px;color:var(--acc)}
+.stat{padding:10px 0}
+.sv{display:flex;justify-content:space-between;font-size:.95rem}
+.sv span{color:var(--mut)}
+.sbar{display:flex;gap:4px;height:6px;margin-top:6px}
+.sbar i,.sbar u{display:block;border-radius:3px;text-decoration:none}
+.sbar i{background:var(--acc)}
+.sbar u{background:var(--mut)}
+.tbl{width:100%;border-collapse:collapse;font-size:.88rem}
+.tbl th{color:var(--mut);font-weight:400;padding:6px 4px;text-align:center}
+.tbl td{padding:9px 4px;text-align:center;border-top:1px solid var(--line)}
+.tbl td:nth-child(2){text-align:start}
+.tbl tr.me{background:var(--card2);font-weight:700}
+.tbl img{width:18px;height:18px;vertical-align:middle;margin-inline-end:6px}
+</style>
+</head>
+<body>
+<div class="demo" id="demo" hidden data-t>وضع تجريبي: البيانات المعروضة وهمية. اضبط API_BASE لعرض نتائج حقيقية.</div>
+<div class="demo" id="off" hidden data-t>أنت غير متصل بالإنترنت. تُعرض آخر بيانات محفوظة.</div>
+<header>
+  <div class="top"><img class="logo" src="logo.png" alt="شعار صافرة" width="66" height="44"><h1 data-t>صافرة</h1><span id="status"></span><button class="ib" id="lg" aria-label="Language" title="العربية / English">EN</button><button class="ib" id="club" data-ta aria-label="ناديي" title="ناديي">🛡</button><button class="ib" id="bell" data-ta aria-label="الإشعارات" title="الإشعارات">🔕</button><button class="ib" id="inst" hidden data-ta aria-label="تثبيت التطبيق" title="تثبيت التطبيق">⬇</button><button class="ib" data-tg="1" data-ta aria-label="تبديل المظهر">◐</button></div>
+  <div class="seg"><button class="sg" data-view="matches" aria-pressed="true" data-t>المباريات</button><button class="sg" data-view="articles" aria-pressed="false" data-t>المقالات</button></div>
+  <div class="sr"><input id="q" type="search" placeholder="ابحث عن فريق أو بطولة" data-tp data-ta aria-label="بحث"></div>
+  <div class="np" id="cpn" hidden><div id="cmsg"></div><div id="clist"></div></div>
+  <div class="np" id="np" hidden><div id="nst"></div>
+    <label><input type="checkbox" data-np="ko"><span data-t>بداية المباراة</span></label><label><input type="checkbox" data-np="gl"><span data-t>الأهداف</span></label><label><input type="checkbox" data-np="ft"><span data-t>نهاية المباراة</span></label>
+    <button class="chip" id="nen" data-t>تفعيل الإشعارات</button></div>
+  <div class="row" id="sports"></div>
+  <div class="row" id="kinds"></div>
+  <div class="row" id="cns"></div>
+</header>
+<nav class="stk"><div class="row" id="days"></div><div class="row" id="tabs"></div></nav>
+<main id="list" aria-live="polite"></main>
+<main id="arts"><div class="row" id="acats"></div><div id="alist"></div></main>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" hidden></div>
+
+<script>
+/* ===== الإعدادات =====
+   API_BASE: رابط الخادم الوسيط (Cloudflare Worker مثلاً) الذي يضيف مفتاح API-Football.
+   اتركه فارغاً لعرض بيانات تجريبية. لا تضع مفتاح API هنا أبداً. */
+const CONFIG = { API_BASE: "https://saferah-api.hardwaregypt.workers.dev", REFRESH_MS: 60000, VAPID_PUBLIC: "" /* المفتاح العام لخدمة الإشعارات الخلفية، انظر الشرح */ };
+
+const CN_AR={"England":"إنجلترا","Spain":"إسبانيا","Italy":"إيطاليا","Germany":"ألمانيا","France":"فرنسا","Saudi-Arabia":"السعودية","Egypt":"مصر","Turkey":"تركيا","Portugal":"البرتغال","Netherlands":"هولندا","Belgium":"بلجيكا","Scotland":"اسكتلندا","Brazil":"البرازيل","Argentina":"الأرجنتين","USA":"أمريكا","Mexico":"المكسيك","Japan":"اليابان","South-Korea":"كوريا الجنوبية","China":"الصين","Morocco":"المغرب","Tunisia":"تونس","Algeria":"الجزائر","Qatar":"قطر","United-Arab-Emirates":"الإمارات","Kuwait":"الكويت","Iraq":"العراق","Jordan":"الأردن","Lebanon":"لبنان","Syria":"سوريا","Libya":"ليبيا","Bahrain":"البحرين","Oman":"عُمان","Sudan":"السودان","Palestine":"فلسطين","Yemen":"اليمن","World":"العالم","Europe":"أوروبا","Russia":"روسيا","Ukraine":"أوكرانيا","Greece":"اليونان","Switzerland":"سويسرا","Austria":"النمسا","Denmark":"الدنمارك","Sweden":"السويد","Norway":"النرويج","Poland":"بولندا","Croatia":"كرواتيا","Serbia":"صربيا","Czech-Republic":"التشيك","Romania":"رومانيا","Colombia":"كولومبيا","Chile":"تشيلي","Uruguay":"الأوروغواي","Australia":"أستراليا","Iran":"إيران","India":"الهند","Nigeria":"نيجيريا","South-Africa":"جنوب أفريقيا","Ghana":"غانا","Senegal":"السنغال","Cameroon":"الكاميرون","Ivory-Coast":"ساحل العاج"};
+const cnLabel=c=>LANG==="ar"?(CN_AR[c]||c):tr(c).replace(/-/g," ");
+const SPORTS = [{id:"football",n:"كرة القدم",i:"⚽"},{id:"basketball",n:"كرة السلة",i:"🏀"},{id:"tennis",n:"التنس",i:"🎾"},{id:"volleyball",n:"الكرة الطائرة",i:"🏐"},{id:"handball",n:"كرة اليد",i:"🤾"},{id:"hockey",n:"الهوكي",i:"🏒"},{id:"baseball",n:"البيسبول",i:"⚾"},{id:"americanfootball",n:"الكرة الأمريكية",i:"🏈"},{id:"rugby",n:"الرجبي",i:"🏉"}];
+/* الرياضات التي يجلبها الخادم الوسيط فعلاً (التنس غير متوفر في API-Sports فيبقى تجريبياً) */
+const REAL = new Set(["football","basketball","volleyball","handball","hockey","baseball","americanfootball","rugby"]);
+/* تصنيف كرة القدم: أندية / منتخبات / سيدات / شباب / عربية */
+const ARAB=new Set(["Egypt","Saudi-Arabia","United-Arab-Emirates","UAE","Qatar","Morocco","Tunisia","Algeria","Kuwait","Iraq","Jordan","Lebanon","Syria","Libya","Bahrain","Oman","Sudan","Palestine","Yemen"]);
+const NAT_RE=/friendl|world cup|euro championship|uefa euro|nations league|qualif|africa cup|copa america|asian cup|gold cup|arab cup|olympic/i, NAT_X=/club|champions|europa|conference|libertadores|sudamericana|league cup|fa cup/i;
+function kindsOf(n,c){ n=n||""; return {nat:NAT_RE.test(n)&&!NAT_X.test(n), wm:/women|femin|femen|ladies/i.test(n), yt:/\bu-?\d{2}\b|youth|junior/i.test(n), ar:ARAB.has((c||"").replace(/\s/g,"-"))||/arab/i.test(n)}; }
+const KINDS=[["all","الكل"],["club","أندية"],["nat","منتخبات"],["wm","سيدات"],["yt","شباب"],["ar","عربية"]];
+const kindOk=m=>S.kind==="all"||(S.kind==="club"?!m.nat&&!m.wm&&!m.yt:S.kind==="nat"?m.nat:S.kind==="wm"?m.wm:S.kind==="yt"?m.yt:m.ar);
+const LBLS={Q1:"ر1",Q2:"ر2",Q3:"ر3",Q4:"ر4",OT:"إضافي",HT:"استراحة",BT:"استراحة",P1:"ش1",P2:"ش2",P3:"ش3","1P":"ش1","2P":"ش2","3P":"ش3","1H":"ش1","2H":"ش2",ET:"إضافي",S1:"م1",S2:"م2",S3:"م3",S4:"م4",S5:"م5",INTR:"توقف"};
+const lbl=c=>LANG!=="ar"?(c||"").replace(/^IN(\d+)$/,"Inn $1"):LBLS[c]||(/^IN\d+$/.test(c||"")?"ف"+c.slice(2):"");
+const SP_LIVE=/^(Q[1-4]|OT|BT|HT|P[1-3]|[1-3]P|PT|1H|2H|ET|S[1-5]|IN\d+|INTR|LIVE)$/;
+function normGame(r,sp){
+  const s=r.status.short, sv=x=>x==null?null:(typeof x==="object"?x.total:x);
+  return {id:sp+r.id, sp, lid:r.league.id, league:r.league.name, ll:r.league.logo, country:(r.country&&r.country.name)||r.league.country||"",
+    home:r.teams.home.name, away:r.teams.away.name, hl:r.teams.home.logo, al:r.teams.away.logo,
+    hg:sv(r.scores.home), ag:sv(r.scores.away), min:0, lbl:s,
+    status:["FT","AOT","AET","AP","PEN","AW","AWD"].includes(s)?"FT":["NS","TBD"].includes(s)?"NS":SP_LIVE.test(s)?"LIVE":s,
+    kick:new Date(r.date)};
+}
+const TABS = [{id:"all",n:"الكل"},{id:"live",n:"مباشر"},{id:"done",n:"انتهت"},{id:"next",n:"قادمة"},{id:"fav",n:"المفضلة"}];
+/* البطولات الكبرى: رقم البطولة في API-Football ← [الاسم بالعربية، الأولوية]. عدّل هذا الجدول كما تشاء. */
+const TOP = {2:["دوري أبطال أوروبا",0],39:["الدوري الإنجليزي الممتاز",1],140:["الدوري الإسباني",2],135:["الدوري الإيطالي",3],78:["الدوري الألماني",4],61:["الدوري الفرنسي",5],3:["الدوري الأوروبي",6],848:["دوري المؤتمر الأوروبي",7],233:["الدوري المصري الممتاز",8],307:["دوري روشن السعودي",9],12:["دوري أبطال أفريقيا",10],20:["كأس الكونفدرالية الأفريقية",11],17:["دوري أبطال آسيا",12],6:["كأس الأمم الأفريقية",13],1:["كأس العالم",14],4:["كأس أمم أوروبا",15],45:["كأس الاتحاد الإنجليزي",16],143:["كأس ملك إسبانيا",17],202:["الدوري التونسي",18],186:["الدوري الجزائري",19],200:["الدوري المغربي",20],9:["كوبا أمريكا",21],7:["كأس آسيا",22],5:["دوري الأمم الأوروبية",23],22:["الكأس الذهبية",24],29:["تصفيات كأس العالم - أفريقيا",25],30:["تصفيات كأس العالم - آسيا",26],32:["تصفيات كأس العالم - أوروبا",27],34:["تصفيات كأس العالم - أمريكا الجنوبية",28],10:["مباريات ودية دولية",29]};
+
+const store = {
+  get(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+/* ===== اللغة: عربي / English ===== */
+const EN = {"صافرة": "Saferah", "صافرة | مواعيد ونتائج المباريات": "Saferah | Fixtures & Live Scores", "شعار صافرة": "Saferah logo", "وضع تجريبي: البيانات المعروضة وهمية. اضبط API_BASE لعرض نتائج حقيقية.": "Demo mode: the data shown is fake. Set API_BASE to show real results.", "أنت غير متصل بالإنترنت. تُعرض آخر بيانات محفوظة.": "You are offline. Showing the last saved data.", "ابحث عن فريق أو بطولة": "Search for a team or league", "بحث": "Search", "الإشعارات": "Notifications", "تثبيت التطبيق": "Install app", "تبديل المظهر": "Toggle theme", "إغلاق": "Close", "إضافة إلى المفضلة": "Add to favorites", "بداية المباراة": "Match start", "الأهداف": "Goals", "نهاية المباراة": "Full time", "تفعيل الإشعارات": "Enable notifications", "كرة القدم": "Football", "كرة السلة": "Basketball", "التنس": "Tennis", "الكرة الطائرة": "Volleyball", "كرة اليد": "Handball", "الهوكي": "Hockey", "البيسبول": "Baseball", "الكرة الأمريكية": "American football", "الرجبي": "Rugby", "الكل": "All", "أندية": "Clubs", "منتخبات": "National teams", "سيدات": "Women", "شباب": "Youth", "عربية": "Arab", "مباشر": "Live", "انتهت": "Finished", "قادمة": "Upcoming", "المفضلة": "Favorites", "★ البطولات الكبرى": "★ Top leagues", "كل الدول": "All countries", "اليوم": "Today", "مؤجلة": "Postponed", "آخر تحديث ": "Updated ", "تعذر التحديث، تُعرض آخر بيانات محفوظة": "Update failed, showing last saved data", "الخادم الوسيط لا يدعم هذه الرياضة بعد": "The server does not support this sport yet", "تعذر التحديث": "Update failed", "لا توجد مباريات في هذا القسم. جرّب يوماً آخر أو اختر «الكل».": "No matches in this section. Try another day or choose “All”.", "لا توجد أحداث بعد.": "No events yet.", "التشكيلة غير متاحة بعد. تظهر عادةً قبل المباراة بوقت قصير.": "Lineups are not available yet. They usually appear shortly before kick-off.", "الإحصائيات غير متاحة بعد.": "Statistics are not available yet.", "الترتيب غير متاح لهذه البطولة.": "Standings are not available for this league.", "تفاصيل المباراة (الأحداث والتشكيلة) متاحة حالياً لكرة القدم فقط.": "Match details (events and lineups) are currently available for football only.", "جارٍ التحميل...": "Loading...", "تعذر جلب التفاصيل. حاول بعد قليل.": "Could not load details. Try again shortly.", "الأحداث": "Events", "التشكيلة": "Lineups", "الإحصائيات": "Stats", "الترتيب": "Table", "لعب": "P", "فارق": "GD", "نقاط": "Pts", "⚽ ضد مرماه": "⚽ Own goal", "⚽ جزاء": "⚽ Penalty", "❌ جزاء": "❌ Missed pen.", "صناعة": "Assist", "البدلاء": "Substitutes", "المدرب": "Coach", "لاعب تجريبي": "Demo player", "بدأت المباراة": "Match started", "⚽ هدف!": "⚽ Goal!", "لتثبيت التطبيق على آيفون: اضغط زر المشاركة في سفاري ثم «إضافة إلى الشاشة الرئيسية».": "To install on iPhone: tap the Share button in Safari, then “Add to Home Screen”.", "على آيفون ثبّت التطبيق على الشاشة الرئيسية أولاً ثم فعّل الإشعارات.": "On iPhone, install the app to the Home Screen first, then enable notifications.", "متصفحك لا يدعم الإشعارات.": "Your browser does not support notifications.", "الإشعارات محظورة، فعّلها من إعدادات الموقع في المتصفح.": "Notifications are blocked. Enable them in your browser’s site settings.", "مفعّلة. اضغط ★ بجانب أي مباراة لمتابعة أحداثها.": "Enabled. Tap ★ next to any match to follow its events.", " (تعمل أثناء فتح التطبيق فقط)": " (works while the app is open only)", "فعّل الإشعارات ثم اضغط ★ بجانب المباريات التي تتابعها.": "Enable notifications, then tap ★ next to the matches you follow.", "الدوري الإنجليزي الممتاز": "Premier League", "الدوري الإسباني": "La Liga", "دوري روشن السعودي": "Saudi Pro League", "الدوري المصري": "Egyptian Premier League", "دوري NBA": "NBA", "بطولة ATP": "ATP Tour", "كأس العالم": "World Cup", "مباريات ودية دولية": "International Friendlies", "دوري الأمم للكرة الطائرة": "Volleyball Nations League", "دوري أبطال أوروبا لكرة اليد": "EHF Champions League", "دوري NHL": "NHL", "دوري MLB": "MLB", "دوري NFL": "NFL", "بطولة الرجبي": "Rugby Championship", "إنجلترا": "England", "إسبانيا": "Spain", "السعودية": "Saudi Arabia", "مصر": "Egypt", "أمريكا": "USA", "عالمي": "International", "العالم": "World", "أوروبا": "Europe", "ليفربول": "Liverpool", "أرسنال": "Arsenal", "مانشستر سيتي": "Man City", "تشيلسي": "Chelsea", "توتنهام": "Tottenham", "نيوكاسل": "Newcastle", "ريال مدريد": "Real Madrid", "برشلونة": "Barcelona", "أتلتيكو مدريد": "Atletico Madrid", "إشبيلية": "Sevilla", "فالنسيا": "Valencia", "بيلباو": "Bilbao", "الهلال": "Al Hilal", "النصر": "Al Nassr", "الاتحاد": "Al Ittihad", "الأهلي": "Al Ahly", "الشباب": "Al Shabab", "الفتح": "Al Fateh", "بيراميدز": "Pyramids", "سيراميكا": "Ceramica", "المصري": "Al Masry", "الإسماعيلي": "Ismaily", "الزمالك": "Zamalek", "ليكرز": "Lakers", "ووريورز": "Warriors", "سيلتكس": "Celtics", "هيت": "Heat", "بكس": "Bucks", "نتس": "Nets", "ألكاراز": "Alcaraz", "سينر": "Sinner", "ديوكوفيتش": "Djokovic", "ميدفيديف": "Medvedev", "زفيريف": "Zverev", "روبليف": "Rublev", "البرازيل": "Brazil", "الأرجنتين": "Argentina", "فرنسا": "France", "ألمانيا": "Germany", "المغرب": "Morocco", "تونس": "Tunisia", "الجزائر": "Algeria", "الأردن": "Jordan", "إيطاليا": "Italy", "بولندا": "Poland", "اليابان": "Japan", "كيل": "Kiel", "باريس": "Paris", "ديسك": "Disc", "ماغديبورغ": "Magdeburg", "بوسطن": "Boston", "تورونتو": "Toronto", "رينجرز": "Rangers", "إدمونتون": "Edmonton", "كولورادو": "Colorado", "فلوريدا": "Florida", "يانكيز": "Yankees", "دودجرز": "Dodgers", "ريد سوكس": "Red Sox", "كابس": "Cubs", "أستروس": "Astros", "بريفز": "Braves", "تشيفز": "Chiefs", "فورتي ناينرز": "49ers", "كاوبويز": "Cowboys", "بيلز": "Bills", "إيغلز": "Eagles", "رافنز": "Ravens", "نيوزيلندا": "New Zealand", "جنوب أفريقيا": "South Africa", "أيرلندا": "Ireland", "أستراليا": "Australia"};
+let LANG = store.get("lang", (navigator.language||"ar").slice(0,2)==="ar" ? "ar" : "en");
+const tr = s => (LANG==="en" && EN[s]!==undefined) ? EN[s] : s;
+function applyLang(){
+  const d=document.documentElement; d.lang=LANG; d.dir=LANG==="ar"?"rtl":"ltr";
+  document.title=tr("صافرة | مواعيد ونتائج المباريات");
+  document.querySelectorAll("[data-t]").forEach(el=>{ el.dataset.k=el.dataset.k||el.textContent.trim(); el.textContent=tr(el.dataset.k); });
+  document.querySelectorAll("[data-tp]").forEach(el=>{ el.dataset.kp=el.dataset.kp||el.placeholder; el.placeholder=tr(el.dataset.kp); });
+  document.querySelectorAll("[data-ta]").forEach(el=>{ el.dataset.ka=el.dataset.ka||el.getAttribute("aria-label"); el.setAttribute("aria-label",tr(el.dataset.ka)); el.title=tr(el.dataset.ka); });
+  document.querySelector(".logo").alt=tr("شعار صافرة"); $("lg").textContent=LANG==="ar"?"EN":"ع"; if(S.view==="articles") $("q").placeholder=tr("ابحث في المقالات");
+}
+
+const S = {sport:"football", offset:0, tab:"all", fav:store.get("fav",[]), top:store.get("top",false), data:[],kind:"all",cn:"",view:"matches",acat:"all",q:"",col:store.get("col",[])};
+const $ = id => document.getElementById(id);
+const fmtT = d => d.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"});
+const dayOf = off => { const d=new Date(); d.setHours(0,0,0,0); d.setDate(d.getDate()+off); return d; };
+const iso = d => d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+
+/* ===== بيانات تجريبية ===== */
+const DEMO = {
+  football:[
+    {id:39,l:"الدوري الإنجليزي الممتاز",c:"إنجلترا",t:["ليفربول","أرسنال","مانشستر سيتي","تشيلسي","توتنهام","نيوكاسل"]},
+    {id:140,l:"الدوري الإسباني",c:"إسبانيا",t:["ريال مدريد","برشلونة","أتلتيكو مدريد","إشبيلية","فالنسيا","بيلباو"]},
+    {id:307,l:"دوري روشن السعودي",c:"السعودية",t:["الهلال","النصر","الاتحاد","الأهلي","الشباب","الفتح"]},
+    {id:233,l:"الدوري المصري",c:"مصر",t:["الأهلي","الزمالك","بيراميدز","سيراميكا","المصري","الإسماعيلي"]}],
+  basketball:[{l:"دوري NBA",c:"أمريكا",t:["ليكرز","ووريورز","سيلتكس","هيت","بكس","نتس"]}],
+  tennis:[{l:"بطولة ATP",c:"عالمي",t:["ألكاراز","سينر","ديوكوفيتش","ميدفيديف","زفيريف","روبليف"]}]
+};
+DEMO.football.forEach(l=>{ if([233,307].includes(l.id)) l.ar=true; });
+DEMO.football.push({id:1,l:"كأس العالم",c:"العالم",nat:true,t:["البرازيل","الأرجنتين","فرنسا","ألمانيا","إسبانيا","إنجلترا"]},{id:10,l:"مباريات ودية دولية",c:"العالم",nat:true,ar:true,t:["مصر","المغرب","السعودية","تونس","الجزائر","الأردن"]});
+Object.assign(DEMO,{
+  volleyball:[{l:"دوري الأمم للكرة الطائرة",c:"عالمي",t:["إيطاليا","بولندا","البرازيل","اليابان","فرنسا","أمريكا"]}],
+  handball:[{l:"دوري أبطال أوروبا لكرة اليد",c:"أوروبا",t:["برشلونة","كيل","باريس","ديسك","ماغديبورغ","الأهلي"]}],
+  hockey:[{l:"دوري NHL",c:"أمريكا",t:["بوسطن","تورونتو","رينجرز","إدمونتون","كولورادو","فلوريدا"]}],
+  baseball:[{l:"دوري MLB",c:"أمريكا",t:["يانكيز","دودجرز","ريد سوكس","كابس","أستروس","بريفز"]}],
+  americanfootball:[{l:"دوري NFL",c:"أمريكا",t:["تشيفز","فورتي ناينرز","كاوبويز","بيلز","إيغلز","رافنز"]}],
+  rugby:[{l:"بطولة الرجبي",c:"عالمي",t:["نيوزيلندا","جنوب أفريقيا","إنجلترا","فرنسا","أيرلندا","أستراليا"]}]});
+const RNG={basketball:[70,50],handball:[22,14],hockey:[0,6],baseball:[0,10],volleyball:[0,3],tennis:[0,3],rugby:[8,35],americanfootball:[7,35]};
+const rnd=(sp,seed,x)=>{const r=RNG[sp]||[0,4]; return r[0]+hash(seed+"."+x)%(r[1]-r[0]+1);};
+const hash = s => { let h=0; for(const c of s) h=(h*31+c.charCodeAt(0))>>>0; return h; };
+function demoFixtures(sport, off){
+  const day=dayOf(off), now=new Date(), out=[], fb=sport==="football";
+  DEMO[sport].forEach((lg,li)=>{
+    for(let k=0;k<3;k++){
+      const seed=hash(sport+iso(day)+li+k);
+      const home=lg.t[seed%6], away=lg.t[(seed%6+1+(seed>>>3)%5)%6];
+      const kick=new Date(day); kick.setHours(14+((seed>>>5)%8),((seed>>>9)%4)*15,0,0);
+      const mins=Math.floor((now-kick)/60000);
+      let status="NS",min=0,hg=null,ag=null;
+      const fh=fb?(seed>>>2)%4:rnd(sport,seed,1), fa=fb?(seed>>>6)%3:rnd(sport,seed,2);
+      if(mins>=110){status="FT";hg=fh;ag=fa;}
+      else if(mins>=0){status="LIVE";const f=Math.min(mins,90)/90; if(fb) min=Math.min(mins,90); hg=Math.floor(fh*f); ag=Math.floor(fa*f);}
+      out.push({id:sport+iso(day)+li+k,sp:sport,lid:lg.id,league:lg.l,country:lg.c,nat:!!lg.nat,ar:!!lg.ar,home,away,hg,ag,status,min,kick});
+    }
+  });
+  return out.sort((a,b)=>a.kick-b.kick);
+}
+
+/* ===== API-Football عبر الخادم الوسيط ===== */
+const LIVE = ["1H","HT","2H","ET","BT","P","LIVE","INT"], DONE = ["FT","AET","PEN"];
+function normalize(r){
+  const s = r.fixture.status.short;
+  return {sp:"football",...kindsOf(r.league.name,r.league.country), id:"f"+r.fixture.id, lid:r.league.id, fid:r.fixture.id, league:r.league.name, country:r.league.country,
+    home:r.teams.home.name, away:r.teams.away.name, ll:r.league.logo, hl:r.teams.home.logo, al:r.teams.away.logo,
+    hg:r.goals.home, ag:r.goals.away, min:r.fixture.status.elapsed||0,
+    status: LIVE.includes(s)?"LIVE":DONE.includes(s)?"FT":["NS","TBD"].includes(s)?"NS":s,
+    kick:new Date(r.fixture.date)};
+}
+async function load(){
+  const day = dayOf(S.offset), ck = "last:"+S.sport+iso(day);
+  $("demo").hidden = !!CONFIG.API_BASE;
+  try{
+    if(CONFIG.API_BASE && REAL.has(S.sport)){
+      const fb=S.sport==="football";
+      const res = await fetch(CONFIG.API_BASE+(fb?"/fixtures?date=":"/"+S.sport+"/games?date=")+iso(day));
+      if(!res.ok) throw new Error(res.status);
+      const prev=new Map(S.data.map(m=>[m.id,{s:m.hg+"-"+m.ag,st:m.status}]));
+      S.data = ((await res.json()).response||[]).map(r=>fb?normalize(r):normGame(r,S.sport)).sort((a,b)=>a.kick-b.kick);
+      S.data.forEach(m=>{const p=prev.get(m.id); if(!p) return; const sc=m.hg+"-"+m.ag; if(m.status==="LIVE"&&p.s!==sc) m.flash=Date.now(); if(S.fav.includes(m.id)) fgNotify(p,m,sc);});
+      store.set(ck,S.data);
+    } else { S.data = demoFixtures(S.sport,S.offset); $("demo").hidden = false; }
+    $("status").textContent = tr("آخر تحديث ") + fmtT(new Date());
+  }catch(e){
+    const c = store.get(ck,null);
+    if(c){ S.data=c.map(m=>({...m,kick:new Date(m.kick)})); $("status").textContent=tr("تعذر التحديث، تُعرض آخر بيانات محفوظة"); }
+    else if(S.sport!=="football"){ S.data=demoFixtures(S.sport,S.offset); $("demo").hidden=false; $("status").textContent=tr("الخادم الوسيط لا يدعم هذه الرياضة بعد"); }
+    else $("status").textContent = tr("تعذر التحديث");
+  }
+  render();
+}
+
+/* ===== العرض ===== */
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function stText(m){
+  if(m.status==="LIVE") return {c:"live",t:m.min?m.min+"'":(lbl(m.lbl)||tr("مباشر"))};
+  if(m.status==="FT") return {c:"",t:tr("انتهت")};
+  if(m.status==="NS") return {c:"",t:fmtT(m.kick)};
+  return {c:"",t:tr("مؤجلة")};
+}
+const skel=()=>{$("list").innerHTML='<div class="sk"></div>'.repeat(4)};
+const rowHtml = m => { const s=stText(m), has=m.hg!==null&&m.hg!==undefined, fl=m.flash&&Date.now()-m.flash<8000;
+  return `<div class="m${fl?" g":""}" data-id="${esc(m.id)}" role="button" tabindex="0"><div class="st ${s.c}">${s.t}</div>
+  <div class="t">${m.hl?`<img src="${esc(m.hl)}" alt="" loading="lazy">`:""}<span>${esc(tr(m.home))}</span></div>
+  <div class="sc${m.status==="LIVE"?" lv":""}">${has?m.hg+" - "+m.ag:"-"}</div>
+  <div class="t">${m.al?`<img src="${esc(m.al)}" alt="" loading="lazy">`:""}<span>${esc(tr(m.away))}</span></div>
+  <button class="star" data-id="${esc(m.id)}" aria-pressed="${S.fav.includes(m.id)}" aria-label="${tr("إضافة إلى المفضلة")}">★</button></div>`; };
+function render(){
+  const cr=$("cns");
+  if(S.sport==="football"){ const cnt={}; S.data.filter(m=>kindOk(m)&&(!S.top||TOP[m.lid])).forEach(m=>{ cnt[m.country]=(cnt[m.country]||0)+1; });
+    if(S.cn&&!cnt[S.cn]) S.cn="";
+    const ks=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
+    cr.innerHTML=ks.length>1?`<button class="chip" data-cn="" aria-pressed="${!S.cn}">${tr("كل الدول")}</button>`+ks.map(c=>`<button class="chip" data-cn="${esc(c)}" aria-pressed="${S.cn===c}">${esc(cnLabel(c))}<i class="n2">${cnt[c]}</i></button>`).join(""):"";
+  } else cr.innerHTML="";
+  const lc=S.data.filter(m=>m.status==="LIVE").length, lt=document.querySelector("[data-tab=live]");
+  if(lt) lt.innerHTML=tr("مباشر")+(lc?` <i class="cnt">${lc}</i>`:"");
+  const fbs=S.sport==="football", nm = m => LANG==="ar" ? ((fbs&&TOP[m.lid]&&TOP[m.lid][0]) || m.league) : tr(m.league);
+  const f = S.data.filter(m => (!fbs||((!S.top||TOP[m.lid])&&kindOk(m)&&(!S.cn||m.country===S.cn))) && (!S.q||(m.home+m.away+(EN[m.home]||"")+(EN[m.away]||"")+nm(m)+m.league).toLowerCase().includes(S.q)) && (
+    S.tab==="all"||(S.tab==="live"&&m.status==="LIVE")||(S.tab==="done"&&m.status==="FT")||
+    (S.tab==="next"&&m.status==="NS")||(S.tab==="fav"&&S.fav.includes(m.id))));
+  if(!f.length){ $("list").innerHTML='<p class="empty">'+tr("لا توجد مباريات في هذا القسم. جرّب يوماً آخر أو اختر «الكل».")+'</p>'; return; }
+  const g = {}; f.forEach(m => (g[nm(m)] ||= {c:m.country,ll:m.ll,p:fbs&&TOP[m.lid]?TOP[m.lid][1]:99,a:[]}).a.push(m));
+  $("list").innerHTML = Object.entries(g).sort((x,y)=>x[1].p-y[1].p).map(([l,v]) => { const col=S.col.includes(l);
+    return `<section class="league${col?" c":""}"><button class="lh" data-lg="${esc(l)}" aria-expanded="${!col}">${v.ll?`<img src="${esc(v.ll)}" alt="" loading="lazy">`:""}<span>${esc(l)}</span><small>${esc(cnLabel(v.c))}</small><em>▾</em></button><div class="ms">${v.a.map(rowHtml).join("")}</div></section>`; }).join("");
+}
+function chips(){
+  $("sports").innerHTML = SPORTS.map(s=>`<button class="chip" data-sport="${s.id}" aria-pressed="${S.sport===s.id}">${s.i} ${tr(s.n)}</button>`).join("");
+  $("kinds").innerHTML = S.sport==="football"?KINDS.map(k=>`<button class="chip" data-kind="${k[0]}" aria-pressed="${S.kind===k[0]}">${tr(k[1])}</button>`).join(""):"";
+  $("tabs").innerHTML = (S.sport==="football"?'<button class="chip" data-top="1" aria-pressed="'+S.top+'">'+tr("★ البطولات الكبرى")+'</button>':"") + TABS.map(t=>`<button class="chip" data-tab="${t.id}" aria-pressed="${S.tab===t.id}">${tr(t.n)}</button>`).join("");
+  let h=""; for(let o=-3;o<=3;o++){ const d=dayOf(o);
+    h+=`<button class="day" data-off="${o}" aria-pressed="${S.offset===o}">${o===0?tr("اليوم"):d.toLocaleDateString(LANG,{weekday:"short"})}<b>${d.getDate()}</b></button>`; }
+  $("days").innerHTML = h;
+}
+document.addEventListener("click", e => {
+  const ar = e.target.closest(".ac"); if(ar){ openArt(ar.dataset.art); return; }
+  const mr = e.target.closest(".m");
+  if(mr && !e.target.closest("button")){ openMatch(mr.dataset.id); return; }
+  const b = e.target.closest("button"); if(!b) return;
+  if(b.dataset.close){ closeOrBack(); return; }
+  if(b.dataset.dt){ curTab=b.dataset.dt; if(curTab==="tb"){ paintSheet(null,"loading"); getStd(cur).then(r=>{ if(cur&&curTab==="tb") paintSheet(r); }).catch(()=>{ if(cur&&curTab==="tb") paintSheet(null,"error"); }); return; } const h=DET.get(cur.id); paintSheet(h?h.d:null, h?undefined:"loading"); return; }
+  if(b.dataset.sport){ S.sport=b.dataset.sport; skel(); chips(); load(); }
+  else if(b.dataset.off){ S.offset=+b.dataset.off; skel(); chips(); load(); }
+  else if(b.dataset.view){ setView(b.dataset.view); }
+  else if(b.dataset.acat){ S.acat=b.dataset.acat; drawArts(); }
+  else if(b.dataset.aclub!==undefined){ S.q=b.dataset.aclub.toLowerCase(); $("q").value=b.dataset.aclub; deepArt=false; closeSheet(); history.replaceState(null,"",location.pathname+location.search); setView("matches"); }
+  else if(b.dataset.ashare){ const u=location.href; (navigator.share?navigator.share({title:document.title,url:u}):navigator.clipboard.writeText(u).then(()=>alert(tr("تم نسخ الرابط")))).catch(()=>{}); }
+  else if(b.id==="lg"){ LANG=LANG==="ar"?"en":"ar"; store.set("lang",LANG); applyLang(); chips(); render(); if(S.view==="articles") drawArts(); if(!$("cpn").hidden) drawClubs(); npDraw(); syncPush(); load(); if(cur&&!$("sheet").hidden){ const hh=DET.get(cur.id); paintSheet(hh?hh.d:null,hh?undefined:"loading"); } }
+  else if(b.id==="club"){ $("cpn").hidden=!$("cpn").hidden; if(!$("cpn").hidden) drawClubs(); }
+  else if(b.dataset.club!==undefined){ chooseClub(b.dataset.club); }
+  else if(b.dataset.cm){ const c=CLUBS.find(x=>x.id===myClub()); if(c){ S.q=c.team; $("q").value=c.team; $("cpn").hidden=true; setView("matches"); } }
+  else if(b.id==="bell"){ $("np").hidden=!$("np").hidden; }
+  else if(b.id==="nen"){ Notification.requestPermission().then(()=>{ npDraw(); syncPush(); }); }
+  else if(b.id==="inst"){ if(dp){ dp.prompt(); dp=null; $("inst").hidden=true; } else alert(tr("لتثبيت التطبيق على آيفون: اضغط زر المشاركة في سفاري ثم «إضافة إلى الشاشة الرئيسية».")); }
+  else if(b.dataset.lg){ const i=S.col.indexOf(b.dataset.lg); i<0?S.col.push(b.dataset.lg):S.col.splice(i,1); store.set("col",S.col); render(); }
+  else if(b.dataset.tg){ setTheme(document.documentElement.dataset.th==="light"?"dark":"light"); }
+  else if(b.dataset.kind){ S.kind=b.dataset.kind; chips(); render(); }
+  else if(b.dataset.top){ S.top=!S.top; store.set("top",S.top); chips(); render(); }
+  else if(b.dataset.cn!==undefined){ S.cn=b.dataset.cn; render(); }
+  else if(b.dataset.tab){ S.tab=b.dataset.tab; chips(); render(); }
+  else if(b.dataset.id){ const i=S.fav.indexOf(b.dataset.id); i<0?S.fav.push(b.dataset.id):S.fav.splice(i,1); store.set("fav",S.fav); render(); syncPush(); }
+});
+function setTheme(t){ document.documentElement.dataset.th=t; store.set("th",t); }
+setTheme(store.get("th","dark"));
+$("q").addEventListener("input",e=>{ S.q=e.target.value.trim().toLowerCase(); S.view==="articles"?drawArts():render(); });
+/* ===== الإشعارات ===== */
+const np=()=>store.get("np",{ko:1,gl:1,ft:1});
+const canN=()=>"Notification" in window;
+function show(t,b,g){ navigator.serviceWorker.ready.then(r=>r.showNotification(t,{body:b,icon:"icon-192.png",badge:"favicon.png",tag:g,dir:"rtl",lang:"ar",data:{url:"./?tab=live"}})).catch(()=>{}); }
+function fgNotify(p,m,sc){
+  if(!canN()||Notification.permission!=="granted") return;
+  const o=np(), t=m.home+" "+(m.hg??0)+" - "+(m.ag??0)+" "+m.away, up=x=>x.split("-").reduce((a,b)=>a+(+b||0),0);
+  if(o.ko&&p.st==="NS"&&m.status==="LIVE") show(tr("بدأت المباراة"),m.home+" × "+m.away,m.id+":k");
+  else if(o.gl&&m.status==="LIVE"&&up(sc)>up(p.s)) show(tr("⚽ هدف!"),t,m.id+":g:"+sc);
+  else if(o.ft&&p.st==="LIVE"&&m.status==="FT") show(tr("نهاية المباراة"),t,m.id+":f");
+}
+function npDraw(){
+  const o=np(), g=canN()&&Notification.permission, ios=/iphone|ipad|ipod/i.test(navigator.userAgent)&&!navigator.standalone;
+  document.querySelectorAll("[data-np]").forEach(c=>{ c.checked=!!o[c.dataset.np]; });
+  $("nst").textContent=!canN()?(ios?tr("على آيفون ثبّت التطبيق على الشاشة الرئيسية أولاً ثم فعّل الإشعارات."):tr("متصفحك لا يدعم الإشعارات.")):g==="denied"?tr("الإشعارات محظورة، فعّلها من إعدادات الموقع في المتصفح."):g==="granted"?tr("مفعّلة. اضغط ★ بجانب أي مباراة لمتابعة أحداثها.")+(CONFIG.VAPID_PUBLIC?"":tr(" (تعمل أثناء فتح التطبيق فقط)")):tr("فعّل الإشعارات ثم اضغط ★ بجانب المباريات التي تتابعها.");
+  $("nen").hidden=!canN()||g!=="default"; $("bell").textContent=g==="granted"?"🔔":"🔕";
+}
+const u8=b=>Uint8Array.from(atob((b+"=".repeat((4-b.length%4)%4)).replace(/-/g,"+").replace(/_/g,"/")),c=>c.charCodeAt(0));
+let syncT=null;
+function syncPush(){ clearTimeout(syncT); syncT=setTimeout(async()=>{
+  if(!CONFIG.VAPID_PUBLIC||!CONFIG.API_BASE||!canN()||!("PushManager" in window)||Notification.permission!=="granted") return;
+  try{ const reg=await navigator.serviceWorker.ready; let sub=await reg.pushManager.getSubscription();
+    if(!sub) sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:u8(CONFIG.VAPID_PUBLIC)});
+    const f=S.fav.filter(i=>/^f\d+$/.test(i)).map(i=>+i.slice(1));
+    await fetch(CONFIG.API_BASE+"/subscribe",{method:"POST",headers:{"content-type":"text/plain"},body:JSON.stringify({endpoint:sub.endpoint,f,o:np(),l:LANG})});
+  }catch(e){} },800); }
+document.addEventListener("change",e=>{ const k=e.target.dataset&&e.target.dataset.np; if(k){ const o=np(); o[k]=e.target.checked?1:0; store.set("np",o); syncPush(); } });
+applyLang(); npDraw(); syncPush();
+let dp=null;
+window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); dp=e; $("inst").hidden=false; });
+window.addEventListener("appinstalled",()=>{ dp=null; $("inst").hidden=true; });
+if(/iphone|ipad|ipod/i.test(navigator.userAgent) && !navigator.standalone) $("inst").hidden=false;
+const syncOff=()=>{ $("off").hidden=navigator.onLine; };
+window.addEventListener("offline",syncOff); window.addEventListener("online",()=>{ syncOff(); load(); }); syncOff();
+const qt=new URLSearchParams(location.search).get("tab"); if(["live","fav","done","next"].includes(qt)) S.tab=qt;
+skel(); chips(); load();
+/* ===== تفاصيل المباراة ===== */
+const DET = new Map();
+let curTab = "ev", cur = null;
+const STAT_AR = {"Shots on Goal":"تسديدات على المرمى","Shots off Goal":"تسديدات خارج المرمى","Total Shots":"إجمالي التسديدات","Blocked Shots":"تسديدات مصدودة","Fouls":"الأخطاء","Corner Kicks":"الركنيات","Offsides":"التسلل","Ball Possession":"الاستحواذ","Yellow Cards":"إنذارات","Red Cards":"طرد","Goalkeeper Saves":"تصديات الحارس","Total passes":"التمريرات","Passes accurate":"تمريرات صحيحة","Passes %":"دقة التمرير","expected_goals":"الأهداف المتوقعة"};
+function demoDetails(m){
+  if(m.status==="NS") return {ev:[],lu:[],st:[]};
+  const ev=[], h=m.hg||0, a=m.ag||0, mx=m.status==="LIVE"?Math.max(m.min,1):90;
+  for(let i=0;i<h+a;i++) ev.push({time:{elapsed:Math.min(mx,5+hash(m.id+i)%85)},team:{name:i<h?m.home:m.away},player:{name:tr("لاعب تجريبي")},assist:{name:null},type:"Goal",detail:"Normal Goal"});
+  ev.sort((x,y)=>x.time.elapsed-y.time.elapsed);
+  const mk=(t,p,sh,on,c,f)=>({team:{name:t},statistics:[{type:"Ball Possession",value:p+"%"},{type:"Total Shots",value:sh},{type:"Shots on Goal",value:on},{type:"Corner Kicks",value:c},{type:"Fouls",value:f}]});
+  return {ev, lu:[], st:[mk(m.home,54,12,5,6,11), mk(m.away,46,9,3,4,13)]};
+}
+async function getDetails(m){
+  const hit = DET.get(m.id);
+  if(hit && Date.now()-hit.t < (m.status==="FT"?3600000:60000)) return hit.d;
+  let d;
+  if(CONFIG.API_BASE && m.fid){
+    const res = await fetch(CONFIG.API_BASE+"/fixtures?id="+m.fid);
+    if(!res.ok) throw new Error(res.status);
+    const r = ((await res.json()).response||[])[0];
+    if(!r) throw new Error("empty");
+    d = {ev:r.events||[], lu:r.lineups||[], st:r.statistics||[]};
+  } else d = demoDetails(m);
+  DET.set(m.id,{t:Date.now(),d});
+  return d;
+}
+function evIcon(e){
+  const t=e.type, d=e.detail||"";
+  if(t==="Goal") return d==="Own Goal"?tr("⚽ ضد مرماه"):d==="Penalty"?tr("⚽ جزاء"):d==="Missed Penalty"?tr("❌ جزاء"):"⚽";
+  if(t==="Card") return d.includes("Red")?"🟥":"🟨";
+  if(t==="subst") return "🔄";
+  if(t==="Var") return "VAR";
+  return "•";
+}
+function evHtml(list){
+  if(!list.length) return '<p class="empty">'+tr("لا توجد أحداث بعد.")+'</p>';
+  return list.map(e=>{
+    const min=(e.time.elapsed||0)+(e.time.extra?"+"+e.time.extra:"");
+    const pn=e.player&&e.player.name||"", an=e.assist&&e.assist.name||"";
+    const who = e.type==="subst" ? esc(pn)+" ⇄ "+esc(an) : esc(pn)+(e.type==="Goal"&&an?" <small>("+tr("صناعة")+": "+esc(an)+")</small>":"");
+    return `<div class="ev"><b>${min}'</b><span>${evIcon(e)}</span><span>${who}<small> · ${esc(e.team.name)}</small></span></div>`;
+  }).join("");
+}
+function luHtml(l){
+  if(!l.length) return '<p class="empty">'+tr("التشكيلة غير متاحة بعد. تظهر عادةً قبل المباراة بوقت قصير.")+'</p>';
+  const pl=x=>`<div class="pl"><b>${x.player.number??""}</b> ${esc(x.player.name)}</div>`;
+  return l.map(t=>`<div class="lu"><h3>${esc(t.team.name)} <small>${esc(t.formation||"")}</small></h3>${(t.startXI||[]).map(pl).join("")}<h4>${tr("البدلاء")}</h4>${(t.substitutes||[]).map(pl).join("")}${t.coach&&t.coach.name?`<h4>${tr("المدرب")}: ${esc(t.coach.name)}</h4>`:""}</div>`).join("");
+}
+function stHtml(s){
+  if(s.length<2) return '<p class="empty">'+tr("الإحصائيات غير متاحة بعد.")+'</p>';
+  const rows=s[0].statistics.map(x=>{ const y=s[1].statistics.find(z=>z.type===x.type); return [x.type,x.value,y?y.value:null]; }).filter(r=>r[1]!==null||r[2]!==null);
+  return rows.map(([k,a,b])=>{
+    const na=parseFloat(a)||0, nb=parseFloat(b)||0, sum=(na+nb)||1;
+    return `<div class="stat"><div class="sv"><b>${a??0}</b><span>${esc(LANG==="ar"?(STAT_AR[k]||k):k)}</span><b>${b??0}</b></div><div class="sbar"><i style="width:${na/sum*100}%"></i><u style="width:${nb/sum*100}%"></u></div></div>`;
+  }).join("");
+}
+/* الترتيب: يتطلب أن يمرّر الخادم الوسيط المسار /standings?league=&season= إلى API-Football */
+const STD = new Map();
+function demoStd(m){ const lg=DEMO.football.find(x=>x.l===m.league)||DEMO.football[0];
+  return lg.t.map((n,i)=>({rank:i+1,team:{name:n},points:60-i*5,goalsDiff:25-i*8,all:{played:25}})); }
+async function getStd(m){
+  if(STD.has(m.lid)) return STD.get(m.lid);
+  let rows;
+  if(CONFIG.API_BASE && m.fid){
+    const y=m.kick.getFullYear(), ss=m.kick.getMonth()>=6?y:y-1;
+    const res=await fetch(CONFIG.API_BASE+"/standings?league="+m.lid+"&season="+ss);
+    if(!res.ok) throw new Error(res.status);
+    const r=((await res.json()).response||[])[0]; rows=r?(r.league.standings[0]||[]):[];
+  } else rows=demoStd(m);
+  STD.set(m.lid,rows); return rows;
+}
+function stdHtml(rows){
+  if(!rows||!rows.length) return '<p class="empty">'+tr("الترتيب غير متاح لهذه البطولة.")+'</p>';
+  const me=[cur.home,cur.away];
+  return '<table class="tbl"><tr><th>#</th><th></th><th>'+tr("لعب")+'</th><th>'+tr("فارق")+'</th><th>'+tr("نقاط")+'</th></tr>'+rows.map(r=>`<tr class="${me.includes(r.team.name)?"me":""}"><td>${r.rank}</td><td>${r.team.logo?`<img src="${esc(r.team.logo)}" alt="">`:""}${esc(r.team.name)}</td><td>${r.all.played}</td><td dir="ltr">${r.goalsDiff}</td><td><b>${r.points}</b></td></tr>`).join("")+'</table>';
+}
+function paintSheet(d,state){
+  const m=cur, s=stText(m), has=m.hg!==null&&m.hg!==undefined;
+  const fb=!m.sp||m.sp==="football";
+  const body = !fb ? '<p class="empty">'+tr("تفاصيل المباراة (الأحداث والتشكيلة) متاحة حالياً لكرة القدم فقط.")+'</p>' : state==="loading" ? '<p class="empty">'+tr("جارٍ التحميل...")+'</p>'
+    : state==="error" ? '<p class="empty">'+tr("تعذر جلب التفاصيل. حاول بعد قليل.")+'</p>'
+    : curTab==="tb" ? stdHtml(d) : curTab==="ev" ? evHtml(d.ev) : curTab==="lu" ? luHtml(d.lu) : stHtml(d.st);
+  const tm=(n,l)=>`<div class="tm">${l?`<img src="${esc(l)}" alt="">`:""}<span>${esc(tr(n))}</span></div>`;
+  $("sheet").innerHTML = `<div class="sh"><button class="x" data-close="1" aria-label="${tr("إغلاق")}">✕</button><span>${esc(tr(m.league))}</span></div>
+  <div class="sb">${tm(m.home,m.hl)}<div><div class="big">${has?m.hg+" - "+m.ag:"-"}</div><div class="st ${s.c}">${s.t}</div></div>${tm(m.away,m.al)}</div>
+  ${fb?`<div class="row">${[["ev",tr("الأحداث")],["lu",tr("التشكيلة")],["st",tr("الإحصائيات")],["tb",tr("الترتيب")]].map(([k,n])=>`<button class="chip" data-dt="${k}" aria-pressed="${curTab===k}">${n}</button>`).join("")}</div>`:""}
+  <div class="body">${body}</div>`;
+}
+/* ===== المقالات ===== */
+Object.assign(EN,{"المباريات":"Matches","المقالات":"Articles","لاعبون":"Players","تاريخ":"History","ابحث في المقالات":"Search articles","لا توجد مقالات بعد.":"No articles yet.","نموذج":"Sample","مباريات هذا النادي":"This club’s matches","مشاركة":"Share","تعذر تحميل المقال.":"Could not load the article.","تم نسخ الرابط":"Link copied"});
+let ART=null, deepArt=false;
+async function loadArts(){ if(ART) return; try{ const r=await fetch("articles/index.json"); ART=r.ok?await r.json():[]; }catch(e){ ART=[]; } }
+const okU=u=>/^(https:\/\/|\.\/|\/|#)/.test(u)||/^[\w-]+\/[\w\/.%-]*$/.test(u);
+const gl=o=>(o&&(o[LANG]||o.ar||o.en))||"";
+function md(src){
+  const inl=s=>esc(s)
+    .replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g,(m,a,u)=>okU(u)?`<img src="${u}" alt="${a}" loading="lazy">`:"")
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g,(m,a,u)=>okU(u)?`<a href="${u}" target="_blank" rel="noopener">${a}</a>`:a)
+    .replace(/\*\*([^*]+)\*\*/g,"<b>$1</b>").replace(/\*([^*\s][^*]*)\*/g,"<i>$1</i>");
+  const ls=src.replace(/\r/g,"").split("\n"), out=[], ul=/^\s*[-*]\s+/, ol=/^\s*\d+[.)]\s+/;
+  const blk=l=>/^(#{2,3}\s|>|\|)/.test(l)||ul.test(l)||ol.test(l);
+  let i=0, m;
+  while(i<ls.length){ const l=ls[i];
+    if(!l.trim()){ i++; continue; }
+    if((m=l.match(/^(#{2,3})\s+(.*)/))){ out.push(`<h${m[1].length}>${inl(m[2])}</h${m[1].length}>`); i++; }
+    else if(ul.test(l)||ol.test(l)){ const o=ol.test(l), re=o?ol:ul, it=[]; while(i<ls.length&&re.test(ls[i])) it.push("<li>"+inl(ls[i++].replace(re,""))+"</li>"); out.push(`<${o?"ol":"ul"}>${it.join("")}</${o?"ol":"ul"}>`); }
+    else if(/^>/.test(l)){ const q=[]; while(i<ls.length&&/^>/.test(ls[i])) q.push(inl(ls[i++].replace(/^>\s?/,""))); out.push("<blockquote>"+q.join("<br>")+"</blockquote>"); }
+    else if(/^\|/.test(l)){ const rows=[]; while(i<ls.length&&/^\|/.test(ls[i])){ if(!/^\|?[\s:|-]+\|?$/.test(ls[i])) rows.push(ls[i].trim().replace(/^\||\|$/g,"").split("|").map(c=>inl(c.trim()))); i++; }
+      out.push('<div class="scroll"><table>'+rows.map((r,k)=>"<tr>"+r.map(c=>k?`<td>${c}</td>`:`<th>${c}</th>`).join("")+"</tr>").join("")+"</table></div>"); }
+    else { const p=[]; while(i<ls.length&&ls[i].trim()&&!blk(ls[i])) p.push(inl(ls[i++])); out.push("<p>"+p.join(" ")+"</p>"); }
+  }
+  return out.join("\n");
+}
+function setView(v){ S.view=v; document.body.dataset.view=v;
+  document.querySelectorAll("button[data-view]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.view===v));
+  $("q").placeholder=tr(v==="articles"?"ابحث في المقالات":"ابحث عن فريق أو بطولة");
+  if(v==="articles") drawArts(); else render(); }
+async function drawArts(){
+  await loadArts();
+  const cats=[["all","الكل"],["club","أندية"],["national","منتخبات"],["player","لاعبون"],["history","تاريخ"]];
+  $("acats").innerHTML=cats.map(c=>`<button class="chip" data-acat="${c[0]}" aria-pressed="${S.acat===c[0]}">${tr(c[1])}</button>`).join("");
+  const f=ART.filter(a=>(S.acat==="all"||a.cat===S.acat)&&(!S.q||(gl(a.title)+gl(a.club)+gl(a.summary)+(a.team||"")).toLowerCase().includes(S.q)))
+    .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")));
+  $("alist").innerHTML=f.length?f.map(a=>`<article class="ac" data-art="${esc(a.id)}" role="button" tabindex="0">${a.cover&&okU(a.cover)?`<img src="${esc(a.cover)}" alt="" loading="lazy">`:""}<div><small>${esc(gl(a.club))} · ${esc(a.date||"")}${a.sample?` · <b>${tr("نموذج")}</b>`:""}</small><h3>${esc(gl(a.title))}</h3><p>${esc(gl(a.summary))}</p></div></article>`).join(""):`<p class="empty">${tr("لا توجد مقالات بعد.")}</p>`;
+}
+async function openArt(id,deep){
+  await loadArts(); const a=ART.find(x=>x.id===id); if(!a) return;
+  deepArt=!!deep; cur=null;
+  $("sheet").hidden=false; document.body.style.overflow="hidden";
+  if(!deep && location.hash!=="#a-"+id) location.hash="a-"+id;
+  const head=`<div class="sh"><button class="x" data-close="1" aria-label="${tr("إغلاق")}">✕</button><span>${esc(gl(a.club))}</span></div>`;
+  $("sheet").innerHTML=head+`<article class="art"><p class="empty">${tr("جارٍ التحميل...")}</p></article>`;
+  let txt="";
+  for(const l of [LANG,LANG==="ar"?"en":"ar"]){ try{ const r=await fetch("articles/"+encodeURIComponent(a.id)+"."+l+".md"); if(r.ok){ txt=await r.text(); break; } }catch(e){} }
+  const inf=(a.info&&(a.info[LANG]||a.info.ar||a.info.en))||{};
+  const facts=Object.keys(inf).length?`<dl class="facts">${Object.entries(inf).map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>`:"";
+  $("sheet").innerHTML=head+`<article class="art">${a.cover&&okU(a.cover)?`<img src="${esc(a.cover)}" alt="">`:""}<small>${esc(a.date||"")}</small><h1>${esc(gl(a.title))}</h1>${facts}${txt?md(txt):`<p class="empty">${tr("تعذر تحميل المقال.")}</p>`}<div class="row">${a.team?`<button class="chip" data-aclub="${esc(a.team)}">📅 ${tr("مباريات هذا النادي")}</button>`:""}<button class="chip" data-ashare="1">🔗 ${tr("مشاركة")}</button></div></article>`;
+  $("sheet").scrollTop=0; document.title=gl(a.title)+" | "+tr("صافرة");
+}
+/* ===== نادي المستخدم ===== */
+Object.assign(EN,{"ناديي":"My club","الخليج":"Gulf","شمال أفريقيا":"North Africa","السودان":"Sudan","مباريات ناديي":"My club’s matches","إزالة":"Remove","اختر ناديك المفضل لتغيير ألوان التطبيق وأيقونته.":"Pick your favorite club to change the app colors and icon."});
+let CLUBS=[];
+const myClub=()=>store.get("club",null);
+async function loadClubs(){ if(CLUBS.length) return; try{ const r=await fetch("clubs.json"); CLUBS=r.ok?await r.json():[]; }catch(e){} }
+async function applyClub(){ await loadClubs(); const c=CLUBS.find(x=>x.id===myClub()), s=document.documentElement.style;
+  if(c){ s.setProperty("--acc",c.acc); s.setProperty("--on",c.on); } else { s.removeProperty("--acc"); s.removeProperty("--on"); } }
+async function drawClubs(){
+  await loadClubs(); const me=myClub(), c=CLUBS.find(x=>x.id===me), ar=LANG==="ar";
+  const regs=[["eg","مصر"],["sa","السعودية"],["gulf","الخليج"],["na","شمال أفريقيا"],["sd","السودان"],["eu","أوروبا"]];
+  $("cmsg").textContent=c?(ar?`ناديك: ${c.ar}. اضغط ⬇ في الأعلى لتثبيت التطبيق بأيقونته.`:`Your club: ${c.en}. Tap ⬇ at the top to install the app with its icon.`):tr("اختر ناديك المفضل لتغيير ألوان التطبيق وأيقونته.");
+  $("clist").innerHTML=(c?`<div class="cg"><button class="chip" data-cm="1">📅 ${tr("مباريات ناديي")}</button><button class="chip" data-club="">✕ ${tr("إزالة")}</button></div>`:"")
+    +regs.map(([k,n])=>`<h4 class="gh">${tr(n)}</h4><div class="cg">${CLUBS.filter(x=>x.reg===k).map(x=>`<button class="chip" data-club="${x.id}" aria-pressed="${me===x.id}"><i class="dot" style="background:linear-gradient(135deg,${x.c1} 50%,${x.c2} 50%)"></i>${esc(ar?x.ar:x.en)}</button>`).join("")}</div>`).join("");
+}
+function chooseClub(id){ store.set("club",id||null); location.replace(location.pathname+(id?"?club="+id+"&p=1":"")); }
+async function openMatch(id){
+  const m=S.data.find(x=>x.id===id); if(!m) return;
+  cur=m; curTab="ev";
+  $("sheet").hidden=false; document.body.style.overflow="hidden";
+  if(location.hash!=="#match") location.hash="match";
+  paintSheet(null,"loading");
+  try{ const d=await getDetails(m); if(cur===m) paintSheet(d); }
+  catch(e){ if(cur===m) paintSheet(null,"error"); }
+}
+function closeSheet(){ $("sheet").hidden=true; document.body.style.overflow=""; cur=null; document.title=tr("صافرة | مواعيد ونتائج المباريات"); }
+function closeOrBack(){ if(deepArt){ deepArt=false; history.replaceState(null,"",location.pathname+location.search); closeSheet(); } else if(/^#(match|a-)/.test(location.hash)) history.back(); else closeSheet(); }
+window.addEventListener("hashchange",()=>{ if(!/^#(match|a-)/.test(location.hash) && !$("sheet").hidden) closeSheet(); });
+document.addEventListener("keydown",e=>{
+  if(e.key==="Enter" && e.target.classList && e.target.classList.contains("m")) openMatch(e.target.dataset.id);
+  if(e.key==="Enter" && e.target.classList && e.target.classList.contains("ac")) openArt(e.target.dataset.art);
+  if(e.key==="Escape" && !$("sheet").hidden) closeOrBack();
+});
+setInterval(() => { if(cur && cur.status==="LIVE" && curTab!=="tb" && !$("sheet").hidden) getDetails(cur).then(d=>{ if(cur) paintSheet(d); }).catch(()=>{}); }, 60000);
+setInterval(() => { if(S.offset===0 && !document.hidden) load(); }, CONFIG.REFRESH_MS);
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+
+/* ===== بدء التشغيل (بعد تعريف كل الدوال والمتغيرات) ===== */
+{ const qp=new URLSearchParams(location.search), qc=qp.get("club");
+  if(qc&&/^[a-z0-9-]{2,24}$/.test(qc)) store.set("club",qc);
+  if(qp.get("p")){ $("cpn").hidden=false; drawClubs(); history.replaceState(null,"",location.pathname+"?club="+qc); } }
+applyClub();
+if(new URLSearchParams(location.search).get("view")==="articles") setView("articles");
+if(/^#a-/.test(location.hash)){ setView("articles"); openArt(decodeURIComponent(location.hash.slice(3)),true); }
+</script>
+</body>
+</html>
